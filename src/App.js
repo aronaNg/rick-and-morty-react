@@ -1,8 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import React, { useState, useEffect, Component } from "react";
-
-// import Search from "./components/search/Search";
+import axios from 'axios';
+import { Link } from "react-router-dom";
+import Search from "./components/search/Search";
 import Card from "./components/card/Card";
 import Pagination from "./components/pagination/Pagination";
 import Navbar from "./components/navbar/Navbar";
@@ -21,7 +22,7 @@ function App() {
       </div>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/:id" element={<CardDetails />} />
+        <Route path="/character/:id" element={<CardDetails />} />
 
         <Route path="/episodes" element={<Episodes />} />
         <Route path="/episodes/:id" element={<CardDetails />} />
@@ -33,38 +34,72 @@ function App() {
   );
 }
 
-const Home = () => {
-  let [pageNumber, updatePageNumber] = useState(1);
-  let [status, updateStatus] = useState("");
-  let [gender, updateGender] = useState("");
-  let [species, updateSpecies] = useState("");
-  let [fetchedData, updateFetchedData] = useState([]);
-  let [search, setSearch] = useState("");
-  let { info, results } = fetchedData;
+// const Home = () => {
+//   let [pageNumber, updatePageNumber] = useState(1);
+//   let [status, updateStatus] = useState("");
+//   let [gender, updateGender] = useState("");
+//   let [species, updateSpecies] = useState("");
+//   let [fetchedData, updateFetchedData] = useState([]);
+//   let [search, setSearch] = useState("");
+//   let { info, results } = fetchedData;
 
-  let api = `https://rickandmortyapi.com/api/character/?page=${pageNumber}&name=${search}&status=${status}&gender=${gender}&species=${species}`;
+//   let api = `https://rickandmortyapi.com/api/character`;
+
+//   useEffect(() => {
+//     (async function () {
+//       let data = await fetch(api).then((res) => res.json());
+//       updateFetchedData(data);
+//     })();
+//   }, [api]);
+
+//   let randomCharacters = results
+//   .sort(() => 0.5 - Math.random())
+//   .slice(0, 5);
+//   return (
+//     <div className="App">
+//       <h1 className="text-center mb-3">Personnages</h1>
+//       <div className="container">
+//             <div className="row">
+//                 <Card page="/" results={randomCharacters} />
+//             </div>
+//       </div>
+//       {/* <Pagination
+//         info={info}
+//         pageNumber={pageNumber}
+//         updatePageNumber={updatePageNumber}
+//       /> */}
+//     </div>
+//   );
+// };
+
+function Home() {
+  const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
-    (async function () {
-      let data = await fetch(api).then((res) => res.json());
-      updateFetchedData(data);
-    })();
-  }, [api]);
+    axios.get('https://rickandmortyapi.com/api/character/')
+      .then(response => {
+        const randomCharacters = response.data.results
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 5);
+        setCharacters(randomCharacters);
+      })
+  }, []);
+
   return (
-    <div className="App">
-      <h1 className="text-center mb-3">Personnages</h1>
-      <div className="container">
-            <div className="row">
-                <Card page="/" results={results} />
-            </div>
-      </div>
-      {/* <Pagination
-        info={info}
-        pageNumber={pageNumber}
-        updatePageNumber={updatePageNumber}
-      /> */}
+    <div>
+      {characters.map(character => (
+        <div key={character.id}>
+          <h2>{character.name}</h2>
+          <Link to={`/character/${character.id}`}>
+            <img src={character.image} alt={character.name} />
+          </Link>
+          <p>Statut : {character.status}</p>
+          <p>Emplacement : {character.location.name}</p>
+        </div>
+      ))}
     </div>
   );
-};
+}
+
 
 export default App;

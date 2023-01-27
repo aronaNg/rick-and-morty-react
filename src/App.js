@@ -3,15 +3,13 @@ import "bootstrap/dist/js/bootstrap";
 import React, { useState, useEffect, Component } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
-import Search from "./components/search/Search";
-import Card from "./components/card/Card";
-import Pagination from "./components/pagination/Pagination";
 import Navbar from "./components/navbar/Navbar";
 import styles from "./components/card/Card.module.scss";
-
+import Cookies from 'js-cookie';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Episodes from "./pages/Episode";
 import Location from "./pages/Location";
+import Favorites from "./pages/Favorites";
 import CardDetails from "./components/card/CardDetails";
 
 function App() {
@@ -28,6 +26,9 @@ function App() {
         <Route path="/episodes" element={<Episodes />} />
         <Route path="/episodes/:id" element={<CardDetails />} />
 
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/favorites/:id" element={<CardDetails />} />
+
         <Route path="/location" element={<Location />} />
         <Route path="/location/:id" element={<CardDetails />} />
       </Routes>
@@ -37,6 +38,20 @@ function App() {
 
 function Home() {
   const [characters, setCharacters] = useState([]);
+  
+  const toggleFavorite = (characterId) => {
+    let favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+    if (favorites.includes(characterId)) {
+      favorites = favorites.filter(id => id !== characterId);
+    } else {
+      favorites.push(characterId);
+    }
+    Cookies.set('favorites', JSON.stringify(favorites));
+  };
+  const isFavorite = (characterId) => {
+    const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+    return favorites.includes(characterId);
+  };
 
   useEffect(() => {
     axios.get('https://rickandmortyapi.com/api/character/')
@@ -52,13 +67,16 @@ function Home() {
     <div className="container">
       <h1 className="text-center mb-3">Personnages</h1>
       <div className="row">
+        
       {characters.map(character => (
+        
         <div key={character.id} className="col-lg-2 col-md-4 col-sm-6 col-12 ">
           <div className="card">
             <Link to={`/character/${character.id}`}>
               <img src={character.image} className="card-img-top" alt={character.name} />
               <div className="card-body">
                 <h5 className="card-title">{character.name}</h5>
+               
                 {(() => {
             if (character.status === "Dead") {
               return (
@@ -90,6 +108,9 @@ function Home() {
               </div>
             </Link>
           </div>
+          <button className="btn btn-primary" onClick={() => toggleFavorite(character.id)}>
+            {isFavorite(character.id) ? <span>&hearts;</span> : <span>&#x1F90D;</span>}
+          </button>
         </div>
       ))}
     </div>
@@ -99,3 +120,6 @@ function Home() {
 
 
 export default App;
+// Bouton favoris (enregistrement en cookie)
+// Icône 🤍 vide si pas en favoris et Icône "heart" si déjà en favoris
+// Le clique sur le bouton change le statut favori du personnage

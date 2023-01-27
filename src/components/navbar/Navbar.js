@@ -40,6 +40,9 @@ const Navbar = () => {
             <NavLink to="/episodes" className="nav-link">
               Episode
             </NavLink>
+            <NavLink to="/favorites" className="nav-link">
+              Favoris
+            </NavLink>
             <NavLink
               activeClassName="active"
               className="nav-link"

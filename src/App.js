@@ -7,6 +7,7 @@ import Search from "./components/search/Search";
 import Card from "./components/card/Card";
 import Pagination from "./components/pagination/Pagination";
 import Navbar from "./components/navbar/Navbar";
+import styles from "./components/card/Card.module.scss";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Episodes from "./pages/Episode";
@@ -34,44 +35,6 @@ function App() {
   );
 }
 
-// const Home = () => {
-//   let [pageNumber, updatePageNumber] = useState(1);
-//   let [status, updateStatus] = useState("");
-//   let [gender, updateGender] = useState("");
-//   let [species, updateSpecies] = useState("");
-//   let [fetchedData, updateFetchedData] = useState([]);
-//   let [search, setSearch] = useState("");
-//   let { info, results } = fetchedData;
-
-//   let api = `https://rickandmortyapi.com/api/character`;
-
-//   useEffect(() => {
-//     (async function () {
-//       let data = await fetch(api).then((res) => res.json());
-//       updateFetchedData(data);
-//     })();
-//   }, [api]);
-
-//   let randomCharacters = results
-//   .sort(() => 0.5 - Math.random())
-//   .slice(0, 5);
-//   return (
-//     <div className="App">
-//       <h1 className="text-center mb-3">Personnages</h1>
-//       <div className="container">
-//             <div className="row">
-//                 <Card page="/" results={randomCharacters} />
-//             </div>
-//       </div>
-//       {/* <Pagination
-//         info={info}
-//         pageNumber={pageNumber}
-//         updatePageNumber={updatePageNumber}
-//       /> */}
-//     </div>
-//   );
-// };
-
 function Home() {
   const [characters, setCharacters] = useState([]);
 
@@ -90,13 +53,39 @@ function Home() {
       <h1 className="text-center mb-3">Personnages</h1>
       <div className="row">
       {characters.map(character => (
-        <div key={character.id} className="col-sm-4">
+        <div key={character.id} className="col-lg-2 col-md-4 col-sm-6 col-12 ">
           <div className="card">
             <Link to={`/character/${character.id}`}>
               <img src={character.image} className="card-img-top" alt={character.name} />
               <div className="card-body">
                 <h5 className="card-title">{character.name}</h5>
-                <p className="card-text">Statut : {character.status}</p>
+                {(() => {
+            if (character.status === "Dead") {
+              return (
+                <div
+                  className={`${styles.badge} position-absolute badge bg-danger`}
+                >
+                  {character.status}
+                </div>
+              );
+            } else if (character.status === "Alive") {
+              return (
+                <div
+                  className={`${styles.badge} position-absolute badge bg-success`}
+                >
+                  {character.status}
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  className={`${styles.badge} position-absolute badge bg-secondary`}
+                >
+                  {character.status}
+                </div>
+              );
+            }
+          })()}
                 <p className="card-text">Emplacement : {character.location.name}</p>
               </div>
             </Link>

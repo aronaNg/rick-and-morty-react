@@ -86,17 +86,24 @@ function Home() {
   }, []);
 
   return (
-    <div>
+    <div className="container">
+      <h1 className="text-center mb-3">Personnages</h1>
+      <div className="row">
       {characters.map(character => (
-        <div key={character.id}>
-          <h2>{character.name}</h2>
-          <Link to={`/character/${character.id}`}>
-            <img src={character.image} alt={character.name} />
-          </Link>
-          <p>Statut : {character.status}</p>
-          <p>Emplacement : {character.location.name}</p>
+        <div key={character.id} className="col-sm-4">
+          <div className="card">
+            <Link to={`/character/${character.id}`}>
+              <img src={character.image} className="card-img-top" alt={character.name} />
+              <div className="card-body">
+                <h5 className="card-title">{character.name}</h5>
+                <p className="card-text">Statut : {character.status}</p>
+                <p className="card-text">Emplacement : {character.location.name}</p>
+              </div>
+            </Link>
+          </div>
         </div>
       ))}
+    </div>
     </div>
   );
 }

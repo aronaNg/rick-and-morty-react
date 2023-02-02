@@ -45,7 +45,28 @@ function App() {
 function Home() {
   const [characters, setCharacters] = useState([]);
   
-  const toggleFavorite = (characterId) => {
+  // const toggleFavorite = (characterId) => {
+  //   let favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+  //   if (favorites.includes(characterId)) {
+  //     favorites = favorites.filter(id => id !== characterId);
+  //   } else {
+  //     favorites.push(characterId);
+  //   }
+  //   Cookies.set('favorites', JSON.stringify(favorites));
+  // };
+
+  // const isFavorite = (characterId) => {
+  //   const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+  //   return favorites.includes(characterId);
+  // };
+
+
+    const isFavorite = (characterId) => {
+      const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+      return favorites.includes(characterId);
+    };
+
+    const toggleFavorite = (characterId) => {
     let favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
     if (favorites.includes(characterId)) {
       favorites = favorites.filter(id => id !== characterId);
@@ -53,21 +74,53 @@ function Home() {
       favorites.push(characterId);
     }
     Cookies.set('favorites', JSON.stringify(favorites));
-  };
-  const isFavorite = (characterId) => {
-    const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
-    return favorites.includes(characterId);
+    setCharacters(characters.map(character => (
+      character.id === characterId
+        ? { ...character, isFavorite: !character.isFavorite }
+        : character
+    )));
   };
 
+  // useEffect(() => {
+  //   axios.get('https://rickandmortyapi.com/api/character/')
+  //     .then(response => {
+  //       const randomCharacters = response.data.results
+  //         .sort(() => 0.5 - Math.random())
+  //         .slice(0, 5);
+  //       setCharacters(randomCharacters);
+  //     })
+  // }, []);
+
   useEffect(() => {
-    axios.get('https://rickandmortyapi.com/api/character/')
-      .then(response => {
-        const randomCharacters = response.data.results
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 5);
-        setCharacters(randomCharacters);
-      })
+    const favorites = Cookies.get("favorites") ? JSON.parse(Cookies.get("favorites")) : [];
+    if (favorites.length > 1) {
+      axios.get(`https://rickandmortyapi.com/api/character/${favorites.join(",")}`)
+        .then(response => {
+          const favoriteCharacters = response.data;
+          if (favoriteCharacters.length < 5) {
+            axios.get('https://rickandmortyapi.com/api/character/')
+              .then(response => {
+                const randomCharacters = response.data.results
+                  .sort(() => 0.5 - Math.random())
+                  .slice(0, 5 - favoriteCharacters.length);
+                setCharacters(favoriteCharacters.concat(randomCharacters));
+              });
+          } else {
+            setCharacters(favoriteCharacters);
+          }
+        });
+    } else {
+      axios.get('https://rickandmortyapi.com/api/character/')
+        .then(response => {
+          const randomCharacters = response.data.results
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 5);
+          setCharacters(randomCharacters);
+        });
+    }
   }, []);
+  
+
 
   return (
     <div className="container">

@@ -4,10 +4,34 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FaRegHeart } from 'react-icons/fa';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHeart,faHeartCircleCheck } from '@fortawesome/free-solid-svg-icons';
+library.add(faHeart,faHeartCircleCheck,FaRegHeart);
 function Favorites() {
   const [characters, setCharacters] = useState([]);
-  const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')): [];
+ 
+  const toggleFavorite = (characterId) => {
+    let favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+    if (favorites.includes(characterId)) {
+      favorites = favorites.filter(id => id !== characterId);
+    } else {
+      favorites.push(characterId);
+    }
+    Cookies.set('favorites', JSON.stringify(favorites));
+    setCharacters(characters.map(character => (
+      character.id === characterId
+        ? { ...character, isFavorite: !character.isFavorite }
+        : character
+    )));
+  };
+  const isFavorite = (characterId) => {
+    const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+    return favorites.includes(characterId);
+  };
 
   useEffect(() => {
     axios.get(`https://rickandmortyapi.com/api/character/${favorites.join(',')}`)
@@ -61,6 +85,9 @@ function Favorites() {
                 </div>
                 </Link>
               </div>
+              <button onClick={() => toggleFavorite(character.id)}>
+                {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
+              </button>
             </div>
           ))}
         </div>

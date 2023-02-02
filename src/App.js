@@ -11,7 +11,13 @@ import Episodes from "./pages/Episode";
 import Location from "./pages/Location";
 import Favorites from "./pages/Favorites";
 import CardDetails from "./components/card/CardDetails";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FaRegHeart } from 'react-icons/fa';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHeart,faHeartCirclePlus,faHeartCircleCheck } from '@fortawesome/free-solid-svg-icons';
+library.add(faHeart,faHeartCirclePlus,faHeartCircleCheck,FaRegHeart);
+// ...
+/// ...
 function App() {
 
   return (
@@ -109,7 +115,7 @@ function Home() {
             </Link>
           </div>
           <button onClick={() => toggleFavorite(character.id)}>
-            {isFavorite(character.id) ? <i className="fas fa-heart red-heart"></i> : <i className="fas fa-heartbeat"></i>}
+            {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
           </button>
         </div>
       ))}

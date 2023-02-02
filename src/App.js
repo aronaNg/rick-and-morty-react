@@ -108,8 +108,8 @@ function Home() {
               </div>
             </Link>
           </div>
-          <button className="btn btn-primary" onClick={() => toggleFavorite(character.id)}>
-            {isFavorite(character.id) ? <span>&hearts;</span> : <span>&#x1F90D;</span>}
+          <button onClick={() => toggleFavorite(character.id)}>
+            {isFavorite(character.id) ? <i className="fas fa-heart red-heart"></i> : <i className="fas fa-heartbeat"></i>}
           </button>
         </div>
       ))}
@@ -120,6 +120,3 @@ function Home() {
 
 
 export default App;
-// Bouton favoris (enregistrement en cookie)
-// Icône 🤍 vide si pas en favoris et Icône "heart" si déjà en favoris
-// Le clique sur le bouton change le statut favori du personnage

@@ -1,24 +1,27 @@
 
 import styles from "../components/card/Card.module.scss";
-import React, { useState, useEffect, Component } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 function Favorites() {
-    const [characters, setCharacters] = useState([]);
-    const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')).slice(-5) : [];
+  const [characters, setCharacters] = useState([]);
+  const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
+
+  useEffect(() => {
+    axios.get(`https://rickandmortyapi.com/api/character/${favorites.join(',')}`)
+      .then(response => {
+        setCharacters(response.data);
+      })
+  }, [favorites]);
+
   
-    useEffect(() => {
-      axios.get(`https://rickandmortyapi.com/api/character/${favorites.join(',')}`)
-        .then(response => {
-          setCharacters(response.data);
-        })
-    }, [favorites]);
-  
-    return (
-      <div className="container">
-        <h1 className="text-center mb-3">Mes favoris</h1>
+
+  return (
+    <div className="container">
+      <h1 className="text-center mb-3">Mes favoris</h1>
+      {favorites.length >0 ? (
         <div className="row">
           {characters.map(character => (
             <div key={character.id} className="col-lg-2 col-md-4 col-sm-6 col-12 ">
@@ -61,7 +64,13 @@ function Favorites() {
             </div>
           ))}
         </div>
-      </div>
-    );
-  }
+      ) : (
+        <div className="text-center">
+          <p>Aucun favoris</p>
+          <Link to="/">Voir la liste des épisodes</Link>
+        </div>
+      )}
+    </div>
+  );
+}
 export default Favorites;

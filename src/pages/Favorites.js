@@ -52,8 +52,13 @@ function Favorites() {
               <div className="card">
                 <Link to={`/character/${character.id}`}>
                   <img src={character.image} className="card-img-top" alt={character.name} />
+                </Link>
+                <button onClick={() => toggleFavorite(character.id)}>
+                {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
+              </button>
                   <div className="card-body">
                     <h5 className="card-title">{character.name}</h5>
+                    
                     {(() => {
               if (character.status === "Dead") {
                 return (
@@ -83,11 +88,8 @@ function Favorites() {
             })()}
                   <p className="card-text">Emplacement : {character.location.name}</p>
                 </div>
-                </Link>
               </div>
-              <button onClick={() => toggleFavorite(character.id)}>
-                {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
-              </button>
+             
             </div>
           ))}
         </div>

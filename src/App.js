@@ -133,6 +133,10 @@ function Home() {
           <div className="card">
             <Link to={`/character/${character.id}`}>
               <img src={character.image} className="card-img-top" alt={character.name} />
+              </Link><br></br>
+              <button onClick={() => toggleFavorite(character.id)}>
+                {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
+              </button>
               <div className="card-body">
                 <h5 className="card-title">{character.name}</h5>
                
@@ -165,11 +169,11 @@ function Home() {
           })()}
                 <p className="card-text">Emplacement : {character.location.name}</p>
               </div>
-            </Link>
+           
           </div>
-          <button onClick={() => toggleFavorite(character.id)}>
+          {/* <button onClick={() => toggleFavorite(character.id)}>
             {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
-          </button>
+          </button> */}
         </div>
       ))}
     </div>

@@ -38,8 +38,7 @@ const Episodes = () => {
         </h5>
         <h5 className="text-center">
           Date: {air_date === "" ? "Unknown" : air_date}
-        </h5>
-       
+        </h5>      
       </div>
       <div className="row">
         <div className="col-lg-3 col-12 mb-4">

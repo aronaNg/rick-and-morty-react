@@ -14,6 +14,7 @@ import CardDetails from "./components/card/CardDetails";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
+import { useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {FaRegHeart } from 'react-icons/fa';
@@ -51,22 +52,20 @@ function App() {
 
 function Home() {
   const [characters, setCharacters] = useState([]);
-  
-  // const toggleFavorite = (characterId) => {
-  //   let favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
-  //   if (favorites.includes(characterId)) {
-  //     favorites = favorites.filter(id => id !== characterId);
-  //   } else {
-  //     favorites.push(characterId);
-  //   }
-  //   Cookies.set('favorites', JSON.stringify(favorites));
-  // };
 
-  // const isFavorite = (characterId) => {
-  //   const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
-  //   return favorites.includes(characterId);
-  // };
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const navigate = useNavigate();
+    
+      const Logout = async () => {
+          try {
 
+              await axios.delete('http://localhost:5000/logout');
+              navigate("/");
+              setIsLoggedIn(false);
+          } catch (error) {
+              console.log(error);
+          }
+      }
 
     const isFavorite = (characterId) => {
       const favorites = Cookies.get('favorites') ? JSON.parse(Cookies.get('favorites')) : [];
@@ -88,15 +87,6 @@ function Home() {
     )));
   };
 
-  // useEffect(() => {
-  //   axios.get('https://rickandmortyapi.com/api/character/')
-  //     .then(response => {
-  //       const randomCharacters = response.data.results
-  //         .sort(() => 0.5 - Math.random())
-  //         .slice(0, 5);
-  //       setCharacters(randomCharacters);
-  //     })
-  // }, []);
 
   useEffect(() => {
     const favorites = Cookies.get("favorites") ? JSON.parse(Cookies.get("favorites")) : [];
@@ -141,9 +131,12 @@ function Home() {
             <Link to={`/character/${character.id}`}>
               <img src={character.image} className="card-img-top" alt={character.name} />
               </Link><br></br>
-              <button onClick={() => toggleFavorite(character.id)}>
-                {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
-              </button>
+              {isLoggedIn ? (
+                <button onClick={() => toggleFavorite(character.id)}>
+                  {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
+                </button>
+               ) : null}
+            
               <div className="card-body">
                 <h5 className="card-title">{character.name}</h5>
                

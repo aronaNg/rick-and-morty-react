@@ -96,7 +96,7 @@ function Favorites() {
       ) : (
         <div className="text-center">
           <p>Aucun favoris</p>
-          <Link to="/">Voir la liste des épisodes</Link>
+          <Link to="/">Voir la liste des personnages</Link>
         </div>
       )}
     </div>

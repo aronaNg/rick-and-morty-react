@@ -1,18 +1,21 @@
 import React,{ useState } from "react";
-
 import { NavLink, Link } from "react-router-dom";
 import "../../App.scss";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "../Login";
 
 const Navbar = () => {
-
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const navigate = useNavigate();
  
   const Logout = async () => {
       try {
+
           await axios.delete('http://localhost:5000/logout');
           navigate("/");
+          setIsLoggedIn(false);
       } catch (error) {
           console.log(error);
       }
@@ -70,16 +73,32 @@ const Navbar = () => {
           </div>
           
         </div>
-        <div className="navbar-end">
-                        <div className="navbar-item">
-                            <div className="buttons">
-                                <button onClick={Logout} className="button is-light">
-                                    Déconnexion
-                                </button>
-                            </div>
-                        </div>
-                       
-                    </div>
+        {isLoggedIn ? (
+          <div className="navbar-end">
+            <div className="navbar-item">
+              <div className="buttons">
+                <button onClick={Logout} className="button is-light">
+                  Déconnexion
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : <div className="navbar-end">
+        <div className="navbar-item">
+          <div className="buttons">
+          <Link to="/login" className="button is-light">
+            Connexion
+          </Link>
+          <Link to="/register" className="button is-light">
+            Inscription
+          </Link>
+          </div>
+        </div>
+        
+      </div>
+      
+      }
+
       </div>
     </nav>
   );

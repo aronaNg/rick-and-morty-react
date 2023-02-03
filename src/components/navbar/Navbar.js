@@ -58,9 +58,6 @@ const Navbar = () => {
             <NavLink to="/episodes" className="nav-link">
               Episode
             </NavLink>
-            <NavLink to="/favorites" className="nav-link">
-              Favoris
-            </NavLink>
             <NavLink
               activeClassName="active"
               className="nav-link"
@@ -68,6 +65,11 @@ const Navbar = () => {
             >
               Location
             </NavLink>
+            {isLoggedIn ? (
+              <NavLink to="/favorites" className="nav-link">
+                Favoris
+              </NavLink>
+            ) : null}
           </div>
           
         </div>
@@ -79,6 +81,7 @@ const Navbar = () => {
                   Déconnexion
                 </button>
               </div>
+              
             </div>
           </div>
         ) : <div className="navbar-end">

@@ -1,11 +1,28 @@
-import React from "react";
+import React,{ useState } from "react";
+
 import { NavLink, Link } from "react-router-dom";
 import "../../App.scss";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = () => {
+
+  const navigate = useNavigate();
+ 
+  const Logout = async () => {
+      try {
+          await axios.delete('http://localhost:5000/logout');
+          navigate("/");
+      } catch (error) {
+          console.log(error);
+      }
+  }
+
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
       <div className="container">
+        
         <Link to="/" className="navbar-brand fs-3 ubuntu"> <span className="text-primary">TP LPRO </span>
           Rick & Morty 
         </Link>
@@ -51,7 +68,18 @@ const Navbar = () => {
               Location
             </NavLink>
           </div>
+          
         </div>
+        <div className="navbar-end">
+                        <div className="navbar-item">
+                            <div className="buttons">
+                                <button onClick={Logout} className="button is-light">
+                                    Déconnexion
+                                </button>
+                            </div>
+                        </div>
+                       
+                    </div>
       </div>
     </nav>
   );

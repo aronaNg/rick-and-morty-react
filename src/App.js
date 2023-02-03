@@ -11,6 +11,10 @@ import Episodes from "./pages/Episode";
 import Location from "./pages/Location";
 import Favorites from "./pages/Favorites";
 import CardDetails from "./components/card/CardDetails";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {FaRegHeart } from 'react-icons/fa';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -28,6 +32,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/character/:id" element={<CardDetails />} />
+        <Route exact path="/login"element={<Login/>} />
+        <Route path="/dashboard"element={<Dashboard/>} />
+         <Route path="/register" element={<Register/>} />
 
         <Route path="/episodes" element={<Episodes />} />
         <Route path="/episodes/:id" element={<CardDetails />} />

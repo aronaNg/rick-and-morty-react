@@ -8,10 +8,27 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
     const [msg, setMsg] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
  
     const Register = async (e) => {
         e.preventDefault();
+        setEmailError('');
+        setPasswordError('');
+        if (!email) {
+            setEmailError('Email is required');
+            return;
+        }
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+            setEmailError('Email is invalid');
+            return;
+        }
+        if (password.length < 8) {
+            setPasswordError('Password must be at least 8 characters');
+            return;
+        }
+
         try {
             await axios.post('http://localhost:5000/users', {
                 name: name,
@@ -47,6 +64,7 @@ const Register = () => {
                                     <div className="controls">
                                         <input type="text" className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </div>
+                                    {emailError && <p className="help is-danger">{emailError}</p>}
                                 </div>
                                 <div className="field mt-5">
                                     <label className="label">Password</label>
@@ -59,6 +77,7 @@ const Register = () => {
                                     <div className="controls">
                                         <input type="password" className="input" placeholder="******" value={confPassword} onChange={(e) => setConfPassword(e.target.value)} />
                                     </div>
+                                    {passwordError && <p className="help is-danger">{passwordError}</p>}
                                 </div>
                                 <div className="field mt-5">
                                     <button className="button is-success is-fullwidth">Register</button>

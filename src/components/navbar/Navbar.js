@@ -3,8 +3,6 @@ import { NavLink, Link } from "react-router-dom";
 import "../../App.scss";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "../Login";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);

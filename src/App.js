@@ -128,10 +128,12 @@ function Home() {
         
         <div key={character.id} className="col-lg-2 col-md-4 col-sm-6 col-12 ">
           <div className="card">
+            
             <Link to={`/character/${character.id}`}>
+   
               <img src={character.image} className="card-img-top" alt={character.name} />
-              </Link><br></br>
-              {isLoggedIn ? (
+            </Link><br></br>
+            {isLoggedIn ? (
                 <button onClick={() => toggleFavorite(character.id)}>
                   {isFavorite(character.id) ? <FontAwesomeIcon icon="fa-solid fa-heart-circle-check" /> : <FaRegHeart />}
                 </button>

@@ -1,11 +1,17 @@
 Adresse email : arona.ngom07@gmail.com 
 
-Partie authentification dans le le repos : https://github.com/aronaNg/rick-and-morty-auth
+Partie authentification(gestion back end) dans le repos (Tp2) : https://github.com/aronaNg/rick-and-morty-auth
+
 Avec une bdd node js
 
-npm install react-router-dom
+Vous pouvez consulter la démo sur youtube, vidéo de 2mns : https://www.youtube.com/watch?v=vdPckzrjl-c
 
-npm install react-paginate --save
+une partie que j'ai rajoutée, un dashboard pour voir les utilisateurs du site avec un petit message de welcome back, 26s : https://www.youtube.com/watch?v=RF5UlZ149f8
+
+
+installer node
+
+npm install react-router-dom
 
 npm install bootstrap
 
@@ -16,5 +22,6 @@ npm install sass
 intaller aussi les icônes de font awesome
 ou ceux de react
 
-npm start
+npm start (partie front end)
+nodemon index.js (partie back end)
 
